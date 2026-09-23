@@ -1,221 +1,455 @@
-
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="h-full bg-slate-950 text-slate-100 antialiased">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Calendario Laboral</title>
-    <!-- Tailwind CSS para diseño profesional -->
+    <title>Control Laboral & Cálculo Salarial Pro</title>
+    
+    <!-- Tailwind CSS CDN with custom config -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- FullCalendar v6 -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
-    <!-- Lucide Icons para iconografía moderna -->
+
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
-        /* Ajustes de estilo para FullCalendar */
-        .fc-event {
-            cursor: pointer;
-            border: none !important;
-            padding: 2px 4px;
-            font-weight: 500;
-            border-radius: 4px;
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #090d16;
         }
-        .fc-daygrid-day-number {
-            font-weight: 600;
-            color: #374151;
-            padding: 8px !important;
+
+        /* Glassmorphism card styles */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .fc-toolbar-title {
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* FullCalendar Custom Dark Design */
+        .fc {
+            --fc-border-color: rgba(255, 255, 255, 0.07);
+            --fc-page-bg-color: transparent;
+            --fc-neutral-bg-color: rgba(255, 255, 255, 0.02);
+            --fc-list-event-hover-bg-color: rgba(255, 255, 255, 0.05);
+            --fc-today-bg-color: rgba(59, 130, 246, 0.08) !important;
+            font-family: inherit;
+        }
+
+        .fc .fc-toolbar-title {
             font-size: 1.25rem !important;
-            font-weight: 700;
-            color: #1f2937;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #f8fafc;
         }
+
+        .fc .fc-col-header-cell-cushion {
+            color: #94a3b8;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 12px 0 !important;
+        }
+
+        .fc .fc-daygrid-day-number {
+            color: #cbd5e1;
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 8px 10px !important;
+            text-decoration: none !important;
+        }
+
+        .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+            color: #60a5fa;
+            font-weight: 800;
+        }
+
+        .fc-button {
+            border-radius: 0.75rem !important;
+            font-weight: 600 !important;
+            font-size: 0.85rem !important;
+            padding: 0.5rem 0.9rem !important;
+            transition: all 0.2s ease !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+        }
+
         .fc-button-primary {
-            background-color: #3b82f6 !important;
-            border-color: #3b82f6 !important;
-            border-radius: 0.375rem !important;
-            font-weight: 500 !important;
-            text-transform: capitalize !important;
+            background-color: rgba(30, 41, 59, 0.8) !important;
+            color: #e2e8f0 !important;
         }
+
         .fc-button-primary:hover {
-            background-color: #2563eb !important;
-            border-color: #2563eb !important;
+            background-color: rgba(51, 65, 85, 1) !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
         }
+
         .fc-button-active {
-            background-color: #1d4ed8 !important;
-            border-color: #1d4ed8 !important;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
+            color: #ffffff !important;
+            border-color: #3b82f6 !important;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+        }
+
+        .fc-event {
+            border: none !important;
+            padding: 4px 8px !important;
+            border-radius: 0.5rem !important;
+            font-size: 0.78rem !important;
+            font-weight: 600 !important;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .fc-event:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Subtle scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.25);
         }
     </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800 min-h-screen flex flex-col">
+<body class="h-full flex flex-col text-slate-100 overflow-x-hidden selection:bg-blue-500 selection:text-white">
 
-    <!-- Header / Navbar -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-10 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="bg-blue-600 text-white p-2 rounded-lg">
-                    <i data-lucide="calendar-check-2" class="w-6 h-6"></i>
+    <!-- Header Topbar -->
+    <header class="glass-panel sticky top-0 z-30 border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Brand / Logo -->
+            <div class="flex items-center space-x-3.5">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/25 ring-1 ring-white/20">
+                    <i data-lucide="calendar-check" class="w-6 h-6 text-white"></i>
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold text-slate-900 leading-tight">Control Laboral Pro</h1>
-                    <p class="text-xs text-slate-500">Registro de jornadas y cómputo de horas</p>
+                    <h1 class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+                        Control Laboral <span class="text-blue-500 font-black">PRO</span>
+                    </h1>
+                    <p class="text-xs text-slate-400 font-medium flex items-center space-x-1.5">
+                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>Cómputo Salarial & Registro Local</span>
+                    </p>
                 </div>
             </div>
-            <div class="flex items-center space-x-2">
-                <button onclick="exportData()" class="flex items-center space-x-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-md font-medium transition">
-                    <i data-lucide="download" class="w-4 h-4"></i>
-                    <span class="hidden sm:inline">Exportar Copia</span>
+
+            <!-- Actions -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <button onclick="exportData()" title="Descargar copia de seguridad" class="flex items-center space-x-2 text-xs font-semibold bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white px-3.5 py-2.5 rounded-xl border border-slate-700/80 transition shadow-sm active:scale-95">
+                    <i data-lucide="download" class="w-4 h-4 text-blue-400"></i>
+                    <span class="hidden md:inline">Exportar Copia</span>
                 </button>
-                <button onclick="importData()" class="flex items-center space-x-1 text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-md font-medium transition">
-                    <i data-lucide="upload" class="w-4 h-4"></i>
-                    <span class="hidden sm:inline">Importar</span>
+                <button onclick="importData()" title="Cargar copia de seguridad" class="flex items-center space-x-2 text-xs font-semibold bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white px-3.5 py-2.5 rounded-xl border border-slate-700/80 transition shadow-sm active:scale-95">
+                    <i data-lucide="upload" class="w-4 h-4 text-emerald-400"></i>
+                    <span class="hidden md:inline">Importar</span>
                 </button>
                 <input type="file" id="importFile" class="hidden" accept=".json" onchange="handleImport(event)">
             </div>
         </div>
     </header>
 
-    <!-- Contenido Principal -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <!-- Main Content Grid -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
 
-        <!-- Panel Lateral: Resumen y Leyenda -->
-        <aside class="space-y-6">
+        <!-- Left Sidebar: Financial Summary & Analytics -->
+        <aside class="lg:col-span-4 space-y-6">
             
-            <!-- Resumen Mensual -->
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
-                <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider flex items-center space-x-2">
-                    <i data-lucide="bar-chart-3" class="w-4 h-4 text-blue-600"></i>
-                    <span>Resumen Vista Actual</span>
-                </h2>
-                
-                <div class="grid grid-cols-1 gap-3">
-                    <div class="bg-emerald-50 border border-emerald-100 p-3 rounded-lg flex justify-between items-center">
-                        <div>
-                            <p class="text-xs text-emerald-700 font-medium">Jornadas Completas</p>
-                            <p id="count-jornada" class="text-xl font-bold text-emerald-800">0</p>
-                        </div>
-                        <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-                    </div>
+            <!-- Salary Card (Featured Glow) -->
+            <div class="relative overflow-hidden rounded-3xl p-6 bg-gradient-to-b from-slate-900 via-slate-900/90 to-slate-950 border border-slate-800 shadow-2xl">
+                <!-- Decorative background glow -->
+                <div class="absolute -top-24 -right-24 w-48 h-48 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none"></div>
 
-                    <div class="bg-amber-50 border border-amber-100 p-3 rounded-lg flex justify-between items-center">
-                        <div>
-                            <p class="text-xs text-amber-700 font-medium">Jornadas y Media</p>
-                            <p id="count-media" class="text-xl font-bold text-amber-800">0</p>
-                        </div>
-                        <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-blue-400">
+                        <i data-lucide="wallet" class="w-4 h-4"></i>
+                        <span>Sueldo Estimado (Vista Actual)</span>
                     </div>
-
-                    <div class="bg-rose-50 border border-rose-100 p-3 rounded-lg flex justify-between items-center">
-                        <div>
-                            <p class="text-xs text-rose-700 font-medium">Días No Trabajados</p>
-                            <p id="count-notrabajado" class="text-xl font-bold text-rose-800">0</p>
-                        </div>
-                        <span class="w-3 h-3 rounded-full bg-rose-500"></span>
-                    </div>
+                    <span class="text-[10px] bg-blue-500/10 text-blue-300 font-semibold px-2.5 py-1 rounded-full border border-blue-500/20">Auto-calculado</span>
                 </div>
 
-                <div class="pt-2 border-t border-slate-100 flex justify-between items-center text-sm">
-                    <span class="font-medium text-slate-600">Total Días Registrados:</span>
-                    <span id="count-total" class="font-bold text-slate-900">0</span>
+                <!-- Big Salary Display -->
+                <div class="my-4">
+                    <div class="flex items-baseline space-x-2">
+                        <span id="total-salary" class="text-4xl sm:text-5xl font-black text-white tracking-tight">0,00</span>
+                        <span class="text-2xl font-bold text-emerald-400">€</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1">Calculado en base a tarifas y ajustes extras aplicados</p>
+                </div>
+
+                <!-- Rate Reference Sub-cards -->
+                <div class="grid grid-cols-2 gap-2.5 pt-4 border-t border-slate-800/80">
+                    <div class="bg-slate-800/40 p-3 rounded-2xl border border-slate-800">
+                        <p class="text-[11px] font-medium text-slate-400">Tarifa Jornada</p>
+                        <p class="text-sm font-bold text-emerald-400 mt-0.5">63,00 €</p>
+                    </div>
+                    <div class="bg-slate-800/40 p-3 rounded-2xl border border-slate-800">
+                        <p class="text-[11px] font-medium text-slate-400">Jornada y Media</p>
+                        <p class="text-sm font-bold text-amber-400 mt-0.5">92,00 €</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Leyenda / Instrucciones -->
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
-                <h3 class="text-sm font-semibold text-slate-700 flex items-center space-x-2">
-                    <i data-lucide="info" class="w-4 h-4 text-slate-400"></i>
-                    <span>¿Cómo funciona?</span>
+            <!-- Detailed Breakdown Card -->
+            <div class="glass-panel p-6 rounded-3xl space-y-4">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-2">
+                    <i data-lucide="pie-chart" class="w-4 h-4 text-blue-400"></i>
+                    <span>Desglose de Días & Extras</span>
                 </h3>
-                <p class="text-xs text-slate-500 leading-relaxed">
-                    Haz clic en cualquier día del calendario para registrar o modificar tu jornada laboral. Los datos se guardan de forma automática en tu navegador.
+
+                <div class="space-y-2.5">
+                    <!-- Jornada completa -->
+                    <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between border-l-4 border-l-emerald-500">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"></div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-200">Jornada Completa</p>
+                                <p class="text-[11px] text-slate-400"><span id="count-jornada">0</span> días × 63€</p>
+                            </div>
+                        </div>
+                        <span id="subtotal-jornada" class="text-sm font-bold text-emerald-400">0,00 €</span>
+                    </div>
+
+                    <!-- Jornada y media -->
+                    <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between border-l-4 border-l-amber-500">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-sm shadow-amber-500/50"></div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-200">Jornada y Media</p>
+                                <p class="text-[11px] text-slate-400"><span id="count-media">0</span> días × 92€</p>
+                            </div>
+                        </div>
+                        <span id="subtotal-media" class="text-sm font-bold text-amber-400">0,00 €</span>
+                    </div>
+
+                    <!-- No trabajado -->
+                    <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between border-l-4 border-l-rose-500">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500/50"></div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-200">No Trabajados</p>
+                                <p class="text-[11px] text-slate-400"><span id="count-notrabajado">0</span> días registrados</p>
+                            </div>
+                        </div>
+                        <span class="text-xs font-semibold text-slate-500">0,00 €</span>
+                    </div>
+
+                    <!-- Suma/Resta Extras acum. -->
+                    <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between border-l-4 border-l-cyan-500">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400/50"></div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-200">Ajustes & Extras</p>
+                                <p class="text-[11px] text-slate-400">Sumas y restas puntuales</p>
+                            </div>
+                        </div>
+                        <span id="subtotal-extras" class="text-sm font-bold text-cyan-400">0,00 €</span>
+                    </div>
+                </div>
+
+                <!-- Total Days Footer -->
+                <div class="pt-3 border-t border-slate-800/80 flex justify-between items-center text-xs">
+                    <span class="font-medium text-slate-400">Total días computados:</span>
+                    <span id="count-total-days" class="font-extrabold text-slate-200 bg-slate-800 px-2.5 py-1 rounded-lg">0 días</span>
+                </div>
+            </div>
+
+            <!-- Quick Info Helper -->
+            <div class="glass-panel p-5 rounded-3xl space-y-2 text-xs text-slate-400">
+                <div class="flex items-center space-x-2 text-slate-300 font-semibold mb-1">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-amber-400"></i>
+                    <span>¿Cómo registrar?</span>
+                </div>
+                <p class="leading-relaxed">
+                    Haz clic sobre cualquier fecha en el calendario para desplegar la ventana de opciones. Podrás asignar la jornada, añadir o restar un importe extra y poner notas.
                 </p>
             </div>
         </aside>
 
-        <!-- Contenedor del Calendario -->
-        <section class="lg:col-span-3 bg-white p-4 sm:p-6 rounded-xl border border-slate-200 shadow-sm">
-            <div id="calendar"></div>
+        <!-- Right Side: Calendar View Container -->
+        <section class="lg:col-span-8 glass-panel p-5 sm:p-7 rounded-3xl shadow-2xl flex flex-col justify-between">
+            <div id="calendar" class="w-full"></div>
         </section>
     </main>
 
-    <!-- Modal para Seleccionar/Editar Tipo de Jornada -->
-    <div id="modal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-xl max-w-md w-full p-6 shadow-xl border border-slate-100 space-y-5 transform transition-all">
-            <div class="flex justify-between items-start">
+    <!-- Modal Form (Sleek Glass Design) -->
+    <div id="modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-md hidden flex items-center justify-center z-50 p-4 transition-all duration-200">
+        <div class="glass-panel bg-slate-900/95 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-800 space-y-6 transform scale-100 transition-all">
+            
+            <!-- Modal Header -->
+            <div class="flex justify-between items-start pb-4 border-b border-slate-800">
                 <div>
-                    <h3 class="text-lg font-bold text-slate-900">Registrar Día Laboral</h3>
-                    <p id="modal-date" class="text-xs font-medium text-blue-600 mt-0.5"></p>
+                    <div class="flex items-center space-x-2 text-xs font-bold text-blue-400 uppercase tracking-wider">
+                        <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                        <span>Registro Diario</span>
+                    </div>
+                    <h3 id="modal-date-display" class="text-lg sm:text-xl font-extrabold text-white mt-1 capitalize"></h3>
                 </div>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-md hover:bg-slate-100">
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white p-2 rounded-xl bg-slate-800/50 hover:bg-slate-800 transition">
                     <i data-lucide="x" class="w-5 h-5"></i>
                 </button>
             </div>
 
-            <!-- Selector de Tipos de Jornada -->
+            <!-- Shift Selection Buttons -->
             <div class="space-y-2">
-                <label class="block text-xs font-medium text-slate-600 uppercase tracking-wider mb-2">Selecciona el estado</label>
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">1. Selecciona Tipo de Jornada</label>
                 
-                <button onclick="saveShift('Jornada')" class="w-full flex items-center justify-between p-3 rounded-lg border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50 transition group text-left">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-4 h-4 rounded-full bg-emerald-500"></div>
-                        <span class="font-semibold text-slate-700 group-hover:text-emerald-900">Jornada</span>
-                    </div>
-                    <span class="text-xs text-slate-400 group-hover:text-emerald-700">1.0 Día</span>
-                </button>
+                <div class="grid grid-cols-1 gap-2.5">
+                    <!-- Option: Jornada -->
+                    <button type="button" onclick="selectShiftType('Jornada')" id="btn-shift-jornada" class="shift-option-btn w-full flex items-center justify-between p-3.5 rounded-2xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 transition text-left group">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"></div>
+                            <div>
+                                <span class="font-bold text-sm text-slate-200 group-hover:text-white block">Jornada Completa</span>
+                                <span class="text-[11px] text-slate-400">Día estándar laboral</span>
+                            </div>
+                        </div>
+                        <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/20">+63,00 €</span>
+                    </button>
 
-                <button onclick="saveShift('Jornada y media')" class="w-full flex items-center justify-between p-3 rounded-lg border border-slate-200 hover:border-amber-500 hover:bg-amber-50 transition group text-left">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-4 h-4 rounded-full bg-amber-500"></div>
-                        <span class="font-semibold text-slate-700 group-hover:text-amber-900">Jornada y media</span>
-                    </div>
-                    <span class="text-xs text-slate-400 group-hover:text-amber-700">1.5 Días</span>
-                </button>
+                    <!-- Option: Jornada y media -->
+                    <button type="button" onclick="selectShiftType('Jornada y media')" id="btn-shift-media" class="shift-option-btn w-full flex items-center justify-between p-3.5 rounded-2xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 transition text-left group">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3.5 h-3.5 rounded-full bg-amber-500 shadow-sm shadow-amber-500/50"></div>
+                            <div>
+                                <span class="font-bold text-sm text-slate-200 group-hover:text-white block">Jornada y Media</span>
+                                <span class="text-[11px] text-slate-400">Jornada ampliada / extra</span>
+                            </div>
+                        </div>
+                        <span class="text-xs font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-xl border border-amber-500/20">+92,00 €</span>
+                    </button>
 
-                <button onclick="saveShift('No trabajado')" class="w-full flex items-center justify-between p-3 rounded-lg border border-slate-200 hover:border-rose-500 hover:bg-rose-50 transition group text-left">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-4 h-4 rounded-full bg-rose-500"></div>
-                        <span class="font-semibold text-slate-700 group-hover:text-rose-900">No trabajado</span>
-                    </div>
-                    <span class="text-xs text-slate-400 group-hover:text-rose-700">0.0 Días</span>
-                </button>
+                    <!-- Option: No trabajado -->
+                    <button type="button" onclick="selectShiftType('No trabajado')" id="btn-shift-notrabajado" class="shift-option-btn w-full flex items-center justify-between p-3.5 rounded-2xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 transition text-left group">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3.5 h-3.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500/50"></div>
+                            <div>
+                                <span class="font-bold text-sm text-slate-200 group-hover:text-white block">No Trabajado</span>
+                                <span class="text-[11px] text-slate-400">Descanso / Festivo / Libre</span>
+                            </div>
+                        </div>
+                        <span class="text-xs font-bold text-slate-400 bg-slate-800 px-2.5 py-1 rounded-xl">0,00 €</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Campo de Notas Opcional -->
-            <div>
-                <label for="shift-note" class="block text-xs font-medium text-slate-600 uppercase tracking-wider mb-1">Nota / Observación (Opcional)</label>
-                <input type="text" id="shift-note" placeholder="Ej. Horas extra, cliente X..." class="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <!-- Extras (+ / -) Section -->
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">2. Ajuste de Extras (Opcional)</label>
+                
+                <div class="grid grid-cols-12 gap-2">
+                    <!-- Toggle Sign Button -->
+                    <button type="button" id="btn-toggle-extra-type" onclick="toggleExtraSign()" class="col-span-4 flex items-center justify-center space-x-1.5 px-3 py-2.5 rounded-2xl border font-bold text-xs transition bg-emerald-500/10 border-emerald-500/30 text-emerald-400">
+                        <i data-lucide="plus-circle" id="extra-icon" class="w-4 h-4"></i>
+                        <span id="extra-sign-label">Sumar</span>
+                    </button>
+
+                    <!-- Numeric Input -->
+                    <div class="col-span-8 relative">
+                        <input type="number" step="0.01" id="shift-extra" placeholder="0.00" class="w-full pl-3 pr-8 py-2.5 text-sm font-bold bg-slate-950 border border-slate-800 rounded-2xl text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                        <span class="absolute right-3 top-3 text-xs font-bold text-slate-500">€</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="flex space-x-3 pt-2">
-                <button id="delete-btn" onclick="deleteShift()" class="flex-1 bg-rose-50 text-rose-600 hover:bg-rose-100 py-2.5 rounded-lg font-medium text-sm transition hidden">
+            <!-- Optional Note -->
+            <div class="space-y-2">
+                <label for="shift-note" class="block text-xs font-bold text-slate-400 uppercase tracking-wider">3. Nota / Observación</label>
+                <input type="text" id="shift-note" placeholder="Ej. Dieta desplazamiento, anticipo..." class="w-full px-3.5 py-2.5 text-sm bg-slate-950 border border-slate-800 rounded-2xl text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+            </div>
+
+            <!-- Actions Footer -->
+            <div class="pt-2 flex items-center space-x-3">
+                <button id="delete-btn" type="button" onclick="deleteShift()" class="hidden flex-1 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 py-3 rounded-2xl font-bold text-xs transition active:scale-95">
                     Eliminar
                 </button>
-                <button onclick="closeModal()" class="flex-1 bg-slate-100 text-slate-700 hover:bg-slate-200 py-2.5 rounded-lg font-medium text-sm transition">
-                    Cancelar
+                <button type="button" onclick="saveShift()" class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-600/30 py-3 rounded-2xl font-bold text-xs transition active:scale-95">
+                    Guardar Cambios
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Script de Lógica de la Aplicación -->
+    <!-- Main Logic Script -->
     <script>
         let calendar;
         let selectedDateStr = null;
-        const STORAGE_KEY = 'work_calendar_events_v1';
+        let currentSelectedShiftType = 'Jornada';
+        let isExtraPositive = true;
 
-        // Estilos de colores por tipo de jornada
-        const SHIFT_TYPES = {
+        const STORAGE_KEY = 'work_calendar_events_v2';
+
+        // Rates Configuration
+        const RATES = {
+            'Jornada': 63,
+            'Jornada y media': 92,
+            'No trabajado': 0
+        };
+
+        const SHIFT_CONFIG = {
             'Jornada': {
-                color: '#10b981', // emerald-500
-                textColor: '#ffffff'
+                color: '#10b981', // Emerald
+                bgClass: 'bg-emerald-500',
+                border: '#059669'
             },
             'Jornada y media': {
-                color: '#f59e0b', // amber-500
-                textColor: '#ffffff'
+                color: '#f59e0b', // Amber
+                bgClass: 'bg-amber-500',
+                border: '#d97706'
             },
             'No trabajado': {
-                color: '#f43f5e', // rose-500
-                textColor: '#ffffff'
+                color: '#ef4444', // Rose/Red
+                bgClass: 'bg-rose-500',
+                border: '#dc2626'
             }
         };
 
@@ -226,7 +460,7 @@
             calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 locale: 'es',
-                firstDay: 1, // La semana empieza en Lunes
+                firstDay: 1, // Start on Monday
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
@@ -245,27 +479,25 @@
                     openModal(info.event.startStr, info.event);
                 },
                 datesSet: function() {
-                    updateSummary();
+                    updateCalculations();
                 }
             });
 
             calendar.render();
-            updateSummary();
+            updateCalculations();
         });
 
-        // Cargar eventos guardados
+        // Local Storage Helpers
         function loadEventsFromStorage() {
             const data = localStorage.getItem(STORAGE_KEY);
             return data ? JSON.parse(data) : [];
         }
 
-        // Guardar eventos en localStorage
         function saveEventsToStorage(events) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
-            updateSummary();
+            updateCalculations();
         }
 
-        // Obtener todos los eventos actuales en formato plano
         function getAllEvents() {
             return calendar.getEvents().map(e => ({
                 id: e.id,
@@ -277,22 +509,79 @@
             }));
         }
 
-        // Abrir Modal
+        // Shift Selection UI state inside modal
+        function selectShiftType(type) {
+            currentSelectedShiftType = type;
+            
+            // Reset button borders
+            document.querySelectorAll('.shift-option-btn').forEach(btn => {
+                btn.classList.remove('border-blue-500', 'bg-blue-500/10');
+                btn.classList.add('border-slate-800', 'bg-slate-800/40');
+            });
+
+            // Highlight selected button
+            let targetBtnId = 'btn-shift-jornada';
+            if (type === 'Jornada y media') targetBtnId = 'btn-shift-media';
+            if (type === 'No trabajado') targetBtnId = 'btn-shift-notrabajado';
+
+            const activeBtn = document.getElementById(targetBtnId);
+            if (activeBtn) {
+                activeBtn.classList.remove('border-slate-800', 'bg-slate-800/40');
+                activeBtn.classList.add('border-blue-500', 'bg-blue-500/10');
+            }
+        }
+
+        // Toggle Extra Sign (+ / -)
+        function toggleExtraSign(forcePositive = null) {
+            if (forcePositive !== null) {
+                isExtraPositive = forcePositive;
+            } else {
+                isExtraPositive = !isExtraPositive;
+            }
+
+            const btn = document.getElementById('btn-toggle-extra-type');
+            const label = document.getElementById('extra-sign-label');
+            const icon = document.getElementById('extra-icon');
+
+            if (isExtraPositive) {
+                btn.className = "col-span-4 flex items-center justify-center space-x-1.5 px-3 py-2.5 rounded-2xl border font-bold text-xs transition bg-emerald-500/10 border-emerald-500/30 text-emerald-400";
+                label.textContent = "Sumar";
+                icon.setAttribute('data-lucide', 'plus-circle');
+            } else {
+                btn.className = "col-span-4 flex items-center justify-center space-x-1.5 px-3 py-2.5 rounded-2xl border font-bold text-xs transition bg-rose-500/10 border-rose-500/30 text-rose-400";
+                label.textContent = "Restar";
+                icon.setAttribute('data-lucide', 'minus-circle');
+            }
+            lucide.createIcons();
+        }
+
+        // Open Modal
         function openModal(dateStr, existingEvent = null) {
             selectedDateStr = dateStr;
             const modal = document.getElementById('modal');
-            const modalDate = document.getElementById('modal-date');
+            const modalDateDisplay = document.getElementById('modal-date-display');
             const noteInput = document.getElementById('shift-note');
+            const extraInput = document.getElementById('shift-extra');
             const deleteBtn = document.getElementById('delete-btn');
 
-            // Formatear la fecha
+            // Format date nicely
             const dateObj = new Date(dateStr + 'T00:00:00');
-            modalDate.textContent = dateObj.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            modalDateDisplay.textContent = dateObj.toLocaleDateString('es-ES', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
 
             if (existingEvent) {
-                noteInput.value = existingEvent.extendedProps.note || '';
+                const props = existingEvent.extendedProps;
+                selectShiftType(props.shiftType || 'Jornada');
+                
+                const extraVal = props.extraAmount || 0;
+                toggleExtraSign(extraVal >= 0);
+                extraInput.value = Math.abs(extraVal) || '';
+                
+                noteInput.value = props.note || '';
                 deleteBtn.classList.remove('hidden');
             } else {
+                selectShiftType('Jornada');
+                toggleExtraSign(true);
+                extraInput.value = '';
                 noteInput.value = '';
                 deleteBtn.classList.add('hidden');
             }
@@ -300,35 +589,46 @@
             modal.classList.remove('hidden');
         }
 
-        // Cerrar Modal
         function closeModal() {
             document.getElementById('modal').classList.add('hidden');
             selectedDateStr = null;
         }
 
-        // Guardar o Actualizar Jornada
-        function saveShift(type) {
+        // Save shift action
+        function saveShift() {
             if (!selectedDateStr) return;
 
-            const note = document.getElementById('shift-note').value;
-            const existingEvent = calendar.getEventById(selectedDateStr);
+            const shiftType = currentSelectedShiftType;
+            const note = document.getElementById('shift-note').value.trim();
+            const rawExtra = parseFloat(document.getElementById('shift-extra').value) || 0;
+            const extraAmount = isExtraPositive ? rawExtra : -Math.abs(rawExtra);
 
+            // Remove existing event if editing
+            const existingEvent = calendar.getEventById(selectedDateStr);
             if (existingEvent) {
                 existingEvent.remove();
             }
 
-            const title = note ? `${type} (${note})` : type;
+            // Title construction
+            let titleParts = [shiftType];
+            if (extraAmount !== 0) {
+                const formattedExtra = (extraAmount > 0 ? '+' : '') + extraAmount.toFixed(2) + '€';
+                titleParts.push(`(${formattedExtra})`);
+            }
+            if (note) {
+                titleParts.push(`- ${note}`);
+            }
 
             calendar.addEvent({
                 id: selectedDateStr,
-                title: title,
+                title: titleParts.join(' '),
                 start: selectedDateStr,
                 allDay: true,
-                backgroundColor: SHIFT_TYPES[type].color,
-                borderColor: SHIFT_TYPES[type].color,
-                textColor: SHIFT_TYPES[type].textColor,
+                backgroundColor: SHIFT_CONFIG[shiftType].color,
+                borderColor: SHIFT_CONFIG[shiftType].border,
                 extendedProps: {
-                    shiftType: type,
+                    shiftType: shiftType,
+                    extraAmount: extraAmount,
                     note: note
                 }
             });
@@ -337,7 +637,7 @@
             closeModal();
         }
 
-        // Eliminar Registro
+        // Delete shift action
         function deleteShift() {
             if (!selectedDateStr) return;
             const existingEvent = calendar.getEventById(selectedDateStr);
@@ -348,39 +648,64 @@
             closeModal();
         }
 
-        // Actualizar Estadísticas del Panel Lateral
-        function updateSummary() {
+        // Recalculate Totals & Salaries
+        function updateCalculations() {
             const events = calendar.getEvents();
+            
             let countJornada = 0;
             let countMedia = 0;
             let countNoTrabajado = 0;
+            let totalExtras = 0;
 
             events.forEach(e => {
-                const type = e.extendedProps.shiftType;
+                const props = e.extendedProps || {};
+                const type = props.shiftType;
+                
                 if (type === 'Jornada') countJornada++;
                 else if (type === 'Jornada y media') countMedia++;
                 else if (type === 'No trabajado') countNoTrabajado++;
+
+                if (props.extraAmount) {
+                    totalExtras += parseFloat(props.extraAmount);
+                }
             });
 
+            const subtotalJornada = countJornada * RATES['Jornada'];
+            const subtotalMedia = countMedia * RATES['Jornada y media'];
+            const grandTotalSalary = subtotalJornada + subtotalMedia + totalExtras;
+
+            // DOM Updates
             document.getElementById('count-jornada').textContent = countJornada;
             document.getElementById('count-media').textContent = countMedia;
             document.getElementById('count-notrabajado').textContent = countNoTrabajado;
-            document.getElementById('count-total').textContent = events.length;
+            document.getElementById('count-total-days').textContent = events.length + ' días';
+
+            document.getElementById('subtotal-jornada').textContent = formatCurrency(subtotalJornada);
+            document.getElementById('subtotal-media').textContent = formatCurrency(subtotalMedia);
+            document.getElementById('subtotal-extras').textContent = (totalExtras >= 0 ? '+' : '') + formatCurrency(totalExtras);
+            document.getElementById('total-salary').textContent = formatCurrency(grandTotalSalary, false);
         }
 
-        // Exportar Copia de Seguridad (JSON)
+        function formatCurrency(amount, includeSymbol = true) {
+            const formatted = new Intl.NumberFormat('es-ES', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+            return includeSymbol ? `${formatted} €` : formatted;
+        }
+
+        // Export/Import Features
         function exportData() {
             const events = getAllEvents();
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(events, null, 2));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", `calendario_laboral_${new Date().toISOString().slice(0,10)}.json`);
+            downloadAnchor.setAttribute("download", `calendario_laboral_pro_${new Date().toISOString().slice(0,10)}.json`);
             document.body.appendChild(downloadAnchor);
             downloadAnchor.click();
             downloadAnchor.remove();
         }
 
-        // Importar Copia de Seguridad
         function importData() {
             document.getElementById('importFile').click();
         }
@@ -397,10 +722,10 @@
                         calendar.removeAllEvents();
                         events.forEach(ev => calendar.addEvent(ev));
                         saveEventsToStorage(events);
-                        alert('¡Datos importados con éxito!');
+                        alert('¡Copia de seguridad importada correctamente!');
                     }
                 } catch (err) {
-                    alert('Error al importar el archivo. Formato no válido.');
+                    alert('Error al leer el archivo JSON. Verifica que sea una copia de seguridad válida.');
                 }
             };
             reader.readAsText(file);
