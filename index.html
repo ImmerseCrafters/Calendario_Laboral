@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control Laboral & Cálculo Salarial Pro</title>
+    <title>Control Laboral & Cómputo Salarial Pro</title>
     
-    <!-- Tailwind CSS CDN with custom config -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -136,6 +136,7 @@
             cursor: pointer;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
             transition: transform 0.15s ease, box-shadow 0.15s ease;
+            text-align: center;
         }
 
         .fc-event:hover {
@@ -143,7 +144,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
         }
 
-        /* Subtle scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -203,9 +203,8 @@
         <!-- Left Sidebar: Financial Summary & Analytics -->
         <aside class="lg:col-span-4 space-y-6">
             
-            <!-- Salary Card (Featured Glow) -->
+            <!-- Salary Card -->
             <div class="relative overflow-hidden rounded-3xl p-6 bg-gradient-to-b from-slate-900 via-slate-900/90 to-slate-950 border border-slate-800 shadow-2xl">
-                <!-- Decorative background glow -->
                 <div class="absolute -top-24 -right-24 w-48 h-48 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -229,12 +228,12 @@
                 <!-- Rate Reference Sub-cards -->
                 <div class="grid grid-cols-2 gap-2.5 pt-4 border-t border-slate-800/80">
                     <div class="bg-slate-800/40 p-3 rounded-2xl border border-slate-800">
-                        <p class="text-[11px] font-medium text-slate-400">Tarifa Jornada</p>
-                        <p class="text-sm font-bold text-emerald-400 mt-0.5">63,00 €</p>
+                        <p class="text-[11px] font-medium text-slate-400">Jornada (J)</p>
+                        <p class="text-sm font-bold text-blue-400 mt-0.5">63,00 €</p>
                     </div>
                     <div class="bg-slate-800/40 p-3 rounded-2xl border border-slate-800">
-                        <p class="text-[11px] font-medium text-slate-400">Jornada y Media</p>
-                        <p class="text-sm font-bold text-amber-400 mt-0.5">92,00 €</p>
+                        <p class="text-[11px] font-medium text-slate-400">Jornada y Media (J½)</p>
+                        <p class="text-sm font-bold text-emerald-400 mt-0.5">92,00 €</p>
                     </div>
                 </div>
             </div>
@@ -248,27 +247,27 @@
 
                 <div class="space-y-2.5">
                     <!-- Jornada completa -->
+                    <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between border-l-4 border-l-blue-500">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50"></div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-200">Jornada (J)</p>
+                                <p class="text-[11px] text-slate-400"><span id="count-jornada">0</span> días × 63€</p>
+                            </div>
+                        </div>
+                        <span id="subtotal-jornada" class="text-sm font-bold text-blue-400">0,00 €</span>
+                    </div>
+
+                    <!-- Jornada y media -->
                     <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between border-l-4 border-l-emerald-500">
                         <div class="flex items-center space-x-3">
                             <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"></div>
                             <div>
-                                <p class="text-xs font-bold text-slate-200">Jornada Completa</p>
-                                <p class="text-[11px] text-slate-400"><span id="count-jornada">0</span> días × 63€</p>
-                            </div>
-                        </div>
-                        <span id="subtotal-jornada" class="text-sm font-bold text-emerald-400">0,00 €</span>
-                    </div>
-
-                    <!-- Jornada y media -->
-                    <div class="glass-card p-3.5 rounded-2xl flex items-center justify-between border-l-4 border-l-amber-500">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-sm shadow-amber-500/50"></div>
-                            <div>
-                                <p class="text-xs font-bold text-slate-200">Jornada y Media</p>
+                                <p class="text-xs font-bold text-slate-200">Jornada y Media (J½)</p>
                                 <p class="text-[11px] text-slate-400"><span id="count-media">0</span> días × 92€</p>
                             </div>
                         </div>
-                        <span id="subtotal-media" class="text-sm font-bold text-amber-400">0,00 €</span>
+                        <span id="subtotal-media" class="text-sm font-bold text-emerald-400">0,00 €</span>
                     </div>
 
                     <!-- No trabajado -->
@@ -276,7 +275,7 @@
                         <div class="flex items-center space-x-3">
                             <div class="w-2.5 h-2.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500/50"></div>
                             <div>
-                                <p class="text-xs font-bold text-slate-200">No Trabajados</p>
+                                <p class="text-xs font-bold text-slate-200">No Trabajados (NT)</p>
                                 <p class="text-[11px] text-slate-400"><span id="count-notrabajado">0</span> días registrados</p>
                             </div>
                         </div>
@@ -321,7 +320,7 @@
         </section>
     </main>
 
-    <!-- Modal Form (Sleek Glass Design) -->
+    <!-- Modal Form -->
     <div id="modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-md hidden flex items-center justify-center z-50 p-4 transition-all duration-200">
         <div class="glass-panel bg-slate-900/95 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-800 space-y-6 transform scale-100 transition-all">
             
@@ -344,36 +343,36 @@
                 <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">1. Selecciona Tipo de Jornada</label>
                 
                 <div class="grid grid-cols-1 gap-2.5">
-                    <!-- Option: Jornada -->
+                    <!-- Option: Jornada (J) -->
                     <button type="button" onclick="selectShiftType('Jornada')" id="btn-shift-jornada" class="shift-option-btn w-full flex items-center justify-between p-3.5 rounded-2xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 transition text-left group">
                         <div class="flex items-center space-x-3">
-                            <div class="w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"></div>
+                            <div class="w-3.5 h-3.5 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50"></div>
                             <div>
-                                <span class="font-bold text-sm text-slate-200 group-hover:text-white block">Jornada Completa</span>
+                                <span class="font-bold text-sm text-slate-200 group-hover:text-white block">Jornada (J)</span>
                                 <span class="text-[11px] text-slate-400">Día estándar laboral</span>
                             </div>
                         </div>
-                        <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/20">+63,00 €</span>
+                        <span class="text-xs font-bold text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-xl border border-blue-500/20">+63,00 €</span>
                     </button>
 
-                    <!-- Option: Jornada y media -->
+                    <!-- Option: Jornada y media (J½) -->
                     <button type="button" onclick="selectShiftType('Jornada y media')" id="btn-shift-media" class="shift-option-btn w-full flex items-center justify-between p-3.5 rounded-2xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 transition text-left group">
                         <div class="flex items-center space-x-3">
-                            <div class="w-3.5 h-3.5 rounded-full bg-amber-500 shadow-sm shadow-amber-500/50"></div>
+                            <div class="w-3.5 h-3.5 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50"></div>
                             <div>
-                                <span class="font-bold text-sm text-slate-200 group-hover:text-white block">Jornada y Media</span>
+                                <span class="font-bold text-sm text-slate-200 group-hover:text-white block">Jornada y Media (J½)</span>
                                 <span class="text-[11px] text-slate-400">Jornada ampliada / extra</span>
                             </div>
                         </div>
-                        <span class="text-xs font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-xl border border-amber-500/20">+92,00 €</span>
+                        <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/20">+92,00 €</span>
                     </button>
 
-                    <!-- Option: No trabajado -->
+                    <!-- Option: No trabajado (NT) -->
                     <button type="button" onclick="selectShiftType('No trabajado')" id="btn-shift-notrabajado" class="shift-option-btn w-full flex items-center justify-between p-3.5 rounded-2xl border border-slate-800 bg-slate-800/40 hover:bg-slate-800 transition text-left group">
                         <div class="flex items-center space-x-3">
                             <div class="w-3.5 h-3.5 rounded-full bg-rose-500 shadow-sm shadow-rose-500/50"></div>
                             <div>
-                                <span class="font-bold text-sm text-slate-200 group-hover:text-white block">No Trabajado</span>
+                                <span class="font-bold text-sm text-slate-200 group-hover:text-white block">No Trabajado (NT)</span>
                                 <span class="text-[11px] text-slate-400">Descanso / Festivo / Libre</span>
                             </div>
                         </div>
@@ -435,19 +434,27 @@
             'No trabajado': 0
         };
 
+        // Code labels for display
+        const SHIFT_LABELS = {
+            'Jornada': 'J',
+            'Jornada y media': 'J½',
+            'No trabajado': 'NT'
+        };
+
+        // Color configurations: J = Blue (#3b82f6), J½ = Green (#10b981), NT = Red (#ef4444)
         const SHIFT_CONFIG = {
             'Jornada': {
-                color: '#10b981', // Emerald
+                color: '#3b82f6',
+                bgClass: 'bg-blue-500',
+                border: '#2563eb'
+            },
+            'Jornada y media': {
+                color: '#10b981',
                 bgClass: 'bg-emerald-500',
                 border: '#059669'
             },
-            'Jornada y media': {
-                color: '#f59e0b', // Amber
-                bgClass: 'bg-amber-500',
-                border: '#d97706'
-            },
             'No trabajado': {
-                color: '#ef4444', // Rose/Red
+                color: '#ef4444',
                 bgClass: 'bg-rose-500',
                 border: '#dc2626'
             }
@@ -460,7 +467,7 @@
             calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 locale: 'es',
-                firstDay: 1, // Start on Monday
+                firstDay: 1,
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
@@ -487,7 +494,6 @@
             updateCalculations();
         });
 
-        // Local Storage Helpers
         function loadEventsFromStorage() {
             const data = localStorage.getItem(STORAGE_KEY);
             return data ? JSON.parse(data) : [];
@@ -509,17 +515,14 @@
             }));
         }
 
-        // Shift Selection UI state inside modal
         function selectShiftType(type) {
             currentSelectedShiftType = type;
             
-            // Reset button borders
             document.querySelectorAll('.shift-option-btn').forEach(btn => {
                 btn.classList.remove('border-blue-500', 'bg-blue-500/10');
                 btn.classList.add('border-slate-800', 'bg-slate-800/40');
             });
 
-            // Highlight selected button
             let targetBtnId = 'btn-shift-jornada';
             if (type === 'Jornada y media') targetBtnId = 'btn-shift-media';
             if (type === 'No trabajado') targetBtnId = 'btn-shift-notrabajado';
@@ -531,7 +534,6 @@
             }
         }
 
-        // Toggle Extra Sign (+ / -)
         function toggleExtraSign(forcePositive = null) {
             if (forcePositive !== null) {
                 isExtraPositive = forcePositive;
@@ -555,7 +557,6 @@
             lucide.createIcons();
         }
 
-        // Open Modal
         function openModal(dateStr, existingEvent = null) {
             selectedDateStr = dateStr;
             const modal = document.getElementById('modal');
@@ -564,7 +565,6 @@
             const extraInput = document.getElementById('shift-extra');
             const deleteBtn = document.getElementById('delete-btn');
 
-            // Format date nicely
             const dateObj = new Date(dateStr + 'T00:00:00');
             modalDateDisplay.textContent = dateObj.toLocaleDateString('es-ES', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
 
@@ -594,23 +594,21 @@
             selectedDateStr = null;
         }
 
-        // Save shift action
         function saveShift() {
             if (!selectedDateStr) return;
 
             const shiftType = currentSelectedShiftType;
+            const labelCode = SHIFT_LABELS[shiftType] || shiftType;
             const note = document.getElementById('shift-note').value.trim();
             const rawExtra = parseFloat(document.getElementById('shift-extra').value) || 0;
             const extraAmount = isExtraPositive ? rawExtra : -Math.abs(rawExtra);
 
-            // Remove existing event if editing
             const existingEvent = calendar.getEventById(selectedDateStr);
             if (existingEvent) {
                 existingEvent.remove();
             }
 
-            // Title construction
-            let titleParts = [shiftType];
+            let titleParts = [labelCode];
             if (extraAmount !== 0) {
                 const formattedExtra = (extraAmount > 0 ? '+' : '') + extraAmount.toFixed(2) + '€';
                 titleParts.push(`(${formattedExtra})`);
@@ -637,7 +635,6 @@
             closeModal();
         }
 
-        // Delete shift action
         function deleteShift() {
             if (!selectedDateStr) return;
             const existingEvent = calendar.getEventById(selectedDateStr);
@@ -648,7 +645,6 @@
             closeModal();
         }
 
-        // Recalculate Totals & Salaries
         function updateCalculations() {
             const events = calendar.getEvents();
             
@@ -674,7 +670,6 @@
             const subtotalMedia = countMedia * RATES['Jornada y media'];
             const grandTotalSalary = subtotalJornada + subtotalMedia + totalExtras;
 
-            // DOM Updates
             document.getElementById('count-jornada').textContent = countJornada;
             document.getElementById('count-media').textContent = countMedia;
             document.getElementById('count-notrabajado').textContent = countNoTrabajado;
@@ -694,7 +689,6 @@
             return includeSymbol ? `${formatted} €` : formatted;
         }
 
-        // Export/Import Features
         function exportData() {
             const events = getAllEvents();
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(events, null, 2));
